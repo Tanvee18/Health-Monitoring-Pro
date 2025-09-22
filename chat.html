@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Monitor Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="app-title">Health Monitor Pro</h1>
+                <div class="current-time" id="currentTime"></div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-tab="dashboard">Dashboard</button>
+            <button class="nav-tab" data-tab="add-reading">Add Reading</button>
+            <button class="nav-tab" data-tab="history">History</button>
+        </nav>
+
+        <!-- Dashboard Tab -->
+        <div class="tab-content active" id="dashboard">
+            <div class="dashboard-grid">
+                <!-- Health Status Summary -->
+                <div class="health-summary card">
+                    <div class="card__body">
+                        <h3>Health Status</h3>
+                        <div class="status-indicator" id="healthStatus">
+                            <span class="status status--info">No readings yet</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Latest Readings -->
+                <div class="latest-readings card">
+                    <div class="card__body">
+                        <h3>Latest Reading</h3>
+                        <div class="readings-grid" id="latestReadings">
+                            <p>No readings available. Add your first reading!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="quick-stats card">
+                    <div class="card__body">
+                        <h3>7-Day Averages</h3>
+                        <div id="quickStats">
+                            <p>No data available</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Health Tips -->
+                <div class="health-tips card">
+                    <div class="card__body">
+                        <h3>Health Tips</h3>
+                        <div id="healthTip">
+                            <p>Stay hydrated by drinking 8-10 glasses of water daily</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <div class="chart-container card">
+                    <div class="card__body">
+                        <h3>Heart Rate Trend</h3>
+                        <canvas id="heartRateChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-container card">
+                    <div class="card__body">
+                        <h3>Blood Pressure Trend</h3>
+                        <canvas id="bloodPressureChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-container card">
+                    <div class="card__body">
+                        <h3>Temperature Trend</h3>
+                        <canvas id="temperatureChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Reading Tab -->
+        <div class="tab-content" id="add-reading">
+            <div class="form-container card">
+                <div class="card__body">
+                    <h3>Add New Health Reading</h3>
+                    <form id="healthForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="heartRate">Heart Rate (bpm)</label>
+                                <input type="number" id="heartRate" name="heartRate" 
+                                       min="30" max="200" step="1" required>
+                                <div class="validation-message" id="heartRate-validation"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="temperature">Temperature (°C)</label>
+                                <input type="number" id="temperature" name="temperature" 
+                                       min="35" max="42" step="0.1" required>
+                                <div class="validation-message" id="temperature-validation"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="systolicBP">Systolic BP (mmHg)</label>
+                                <input type="number" id="systolicBP" name="systolicBP" 
+                                       min="80" max="250" step="1" required>
+                                <div class="validation-message" id="systolicBP-validation"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="diastolicBP">Diastolic BP (mmHg)</label>
+                                <input type="number" id="diastolicBP" name="diastolicBP" 
+                                       min="40" max="300" step="1" required>
+                                <div class="validation-message" id="diastolicBP-validation"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="weight">Weight (kg)</label>
+                                <input type="number" id="weight" name="weight" 
+                                       min="20" max="300" step="0.1" required>
+                                <div class="validation-message" id="weight-validation"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="bloodSugar">Blood Sugar (mg/dL)</label>
+                                <input type="number" id="bloodSugar" name="bloodSugar" 
+                                       min="40" max="400" step="1" required>
+                                <div class="validation-message" id="bloodSugar-validation"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn--primary">Save Reading</button>
+                            <button type="button" class="btn btn--secondary" id="clearForm">Clear Form</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Tab -->
+        <div class="tab-content" id="history">
+            <div class="history-container card">
+                <div class="card__body">
+                    <div class="history-header">
+                        <h3>Reading History</h3>
+                        <div class="history-actions">
+                            <button class="btn btn--secondary" id="exportData">Export CSV</button>
+                            <button class="btn btn--danger" id="clearAllData">Clear All</button>
+                        </div>
+                    </div>
+                    
+                    <div class="history-filters">
+                        <input type="date" id="filterStartDate" class="date-input">
+                        <input type="date" id="filterEndDate" class="date-input">
+                        <button class="btn btn--secondary" id="applyFilter">Filter</button>
+                        <button class="btn btn--secondary" id="clearFilter">Show All</button>
+                    </div>
+
+                    <div class="history-table-container">
+                        <table class="history-table" id="historyTable">
+                            <thead>
+                                <tr>
+                                    <th>Date & Time</th>
+                                    <th>Heart Rate</th>
+                                    <th>Temperature</th>
+                                    <th>Blood Pressure</th>
+                                    <th>Weight</th>
+                                    <th>Blood Sugar</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyTableBody">
+                                <tr>
+                                    <td colspan="8" class="no-data">No readings available</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div id="messageContainer" class="message-container"></div>
+    <!-- Chatbot -->
+<div id="chatbotWindow" class="chatbot-window" style="display: none;">
+    <div class="chatbot-header">
+        <h4>Health Assistant</h4>
+        <button id="chatbotClose" class="chatbot-close">✖</button>
+    </div>
+    <div id="chatbotMessages" class="chatbot-messages"></div>
+    <div class="chatbot-input-container">
+        <input type="text" id="chatInput" placeholder="Type your message...">
+        <button id="sendBtn">Send</button>
+    </div>
+</div>
+
+<!-- Floating toggle button -->
+<button id="chatbotToggle" class="chatbot-toggle">💬</button>
+
+
+    <script src="app.js"></script>
+</body>
+</html>
