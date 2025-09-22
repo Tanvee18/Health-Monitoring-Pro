@@ -17,5 +17,5 @@ It provides an interactive and responsive dashboard, making it easy to monitor v
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/<your-username>/health-monitoring-pro.git
+git clone https://github.com/Tanvee18/health-monitoring-pro.git
 cd health-monitoring-pro
